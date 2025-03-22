@@ -1,0 +1,41 @@
+{
+  "name": "remtemplate",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start:dev": "cd backend && NODE_ENV=development nodemon index.js",
+    "start:pro": "cd backend && NODE_ENV=production node index.js",
+    "migration": "cd backend && mikro-orm migration:create",
+    "migrate": "cd backend && mikro-orm migration:up",
+    "frontend": "vite frontend",
+    "build": "vite build frontend --outDir ../dist --emptyOutDir",
+    "start": "npm run migrate && npm run start:pro",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mikro-orm/better-sqlite": "^6.4.11",
+    "@mikro-orm/core": "^6.4.11",
+    "@mikro-orm/migrations": "^6.4.11",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@mikro-orm/cli": "^6.4.11",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "nodemon": "^3.1.9",
+    "vite": "^6.2.0",
+    "vite-plugin-commonjs": "^0.10.4"
+  }
+}
