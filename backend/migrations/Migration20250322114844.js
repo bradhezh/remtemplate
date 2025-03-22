@@ -14,6 +14,7 @@ class Migration20250322114844 extends Migration {
     this.addSql(`create unique index \`item_name_unique\` on \`item\` (\`name\`);`);
     this.addSql(`create index \`item_user_id_index\` on \`item\` (\`user_id\`);`);
 
+    // initial data can't be auto generated, can be inserted here manually
     this.addSql(`insert into item (created_at, updated_at, name) values (strftime('%s', 'now'), strftime('%s', 'now'), 'item 1');`);
     this.addSql(`insert into item (created_at, updated_at, name) values (strftime('%s', 'now'), strftime('%s', 'now'), 'item 2');`);
   }
