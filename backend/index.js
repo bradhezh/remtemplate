@@ -8,7 +8,7 @@ const {
   await init()
 
   app.listen(conf.PORT, () => {
-    console.log(`the server is running on ${conf.PORT}`) 
+    console.log(`the server is running on ${conf.PORT}`)
   })
 
 } catch (err) {
