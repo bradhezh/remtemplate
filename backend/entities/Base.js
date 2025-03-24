@@ -33,12 +33,14 @@ const schema = new EntitySchema({
     createdAt: {
       type: 'Date',
       lazy: true,
+      hidden: true,
       // auto-generated
       onCreate: () => new Date(),
     },
     updatedAt: {
       type: 'Date',
       lazy: true,
+      hidden: true,
       // auto-generated
       onCreate: () => new Date(),
       onUpdate: () => new Date(),

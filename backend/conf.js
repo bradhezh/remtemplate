@@ -7,6 +7,7 @@ const conf = require('../conf')
 conf.NODE_ENV = process.env.NODE_ENV
 conf.NODE_ENV_PRO = 'production'
 conf.NODE_ENV_DEV = 'development'
+conf.NODE_ENV_TST = 'test'
 
 conf.PORT = process.env.PORT || 3000
 

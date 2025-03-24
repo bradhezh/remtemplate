@@ -20,7 +20,7 @@ module.exports = defineConfig({
   /* can be inferred from the package imported
   driver: BetterSqliteDriver,
   */
-  dbName: 'data.sqlite',
+  dbName: conf.NODE_ENV === conf.NODE_ENV_TST ? 'test.sqlite' : 'data.sqlite',
   /* mysql
   host: 'host',
   dbName: 'database',
@@ -40,13 +40,14 @@ module.exports = defineConfig({
     './entities',
   ],
   migrations: {
-    path: './migrations',
+    path:
+      conf.NODE_ENV === conf.NODE_ENV_TST ? './migrationstest' : './migrations',
     emit: 'js',
   },
   /* as default since v4
   metadataProvider: ReflectMetadataProvider,
   */
-  debug: conf.NODE_ENV === conf.NODE_ENV_DEV ? true : false,
+  debug: conf.NODE_ENV !== conf.NODE_ENV_PRO ? true : false,
   /* limitations of the connection pool
   pool: {
     min: 2,

@@ -6,11 +6,14 @@
     "start:dev": "cd backend && NODE_ENV=development nodemon index.js",
     "start:pro": "cd backend && NODE_ENV=production node index.js",
     "migration": "cd backend && mikro-orm migration:create",
+    "migration:tst": "cd backend && NODE_ENV=test mikro-orm migration:create",
     "migrate": "cd backend && mikro-orm migration:up",
+    "migrate:tst": "cd backend && NODE_ENV=test mikro-orm migration:up",
     "frontend": "vite frontend",
     "build": "vite build frontend --outDir ../dist --emptyOutDir",
     "start": "npm run migrate && npm run start:pro",
     "lint": "eslint .",
+    "test:be": "cd backend && NODE_ENV=test node --test",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -35,6 +38,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "nodemon": "^3.1.9",
+    "supertest": "^7.1.0",
     "vite": "^6.2.0",
     "vite-plugin-commonjs": "^0.10.4"
   }

@@ -8,6 +8,7 @@ export default [
     ignores: [
       'dist',
       'backend/migrations',
+      'backend/migrationstest',
     ],
   },
   {
