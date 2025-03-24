@@ -12,6 +12,11 @@ export default defineConfig({
     react(),
     commonjs(),
   ],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/tests/setupTests.js',
+  },
   server: {
     // for the development server to forward restful requests to the backend
     proxy: {

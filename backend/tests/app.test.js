@@ -47,7 +47,6 @@ describe('endpoints', () => {
     })
 
     test('get', async () => {
-      console.log(em)
       const res = await api
         .get(conf.ITEMS_EP)
         .expect(200)
