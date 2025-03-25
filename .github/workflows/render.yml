@@ -1,0 +1,32 @@
+name: Render Pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    # opened means created
+    types: [opened, synchronize]
+
+jobs:
+  full:
+    name: Full Pipeline on Render
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm i
+      - run: npm run lint
+      - name: Test
+        env:
+          DB_URL_TEST: ${{ secrets.DB_URL_TEST }}
+        run: npm test
+      # not necessary; built in the cloud
+      #- run: npm run build
+      - name: Trigger Deployment on Render
+        # only deploy on (after) pushing (merging) to "master"
+        if: ${{ github.event_name == 'push' }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}

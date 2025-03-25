@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "test:be": "cd backend && NODE_ENV=test node --test",
     "test:fe": "cd frontend && vitest run",
-    "test": "npm run test:be && npm run test:fe",
+    "test": "npm run migrate:tst && npm run test:be && npm run test:fe",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -23,6 +23,8 @@
     "@mikro-orm/cli": "^6.4.11",
     "@mikro-orm/core": "^6.4.11",
     "@mikro-orm/migrations": "^6.4.11",
+    "@mikro-orm/migrations-mongodb": "^6.4.11",
+    "@mikro-orm/mongodb": "^6.4.11",
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
