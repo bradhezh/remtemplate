@@ -23,6 +23,10 @@ const init = async () => {
   app.get('/', (req, res) => {
     res.send('<h1>Hello world!</h1>')
   })
+  // for deployment or health check
+  app.get('/version', (req, res) => {
+    res.send('0')
+  })
 
   DI.db = await MikroORM.init()
   DI.em = DI.db.em
