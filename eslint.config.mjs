@@ -7,8 +7,8 @@ export default [
   {
     ignores: [
       'dist',
-      'backend/migrations',
-      'backend/migrationstest',
+      'backend/migrations*',
+      'backend/migrationstest*',
     ],
   },
   {
@@ -19,6 +19,11 @@ export default [
         ...globals.browser,
         ...globals.node,
         ...globals.es2020,
+        // vitest globals
+        vi: true,
+        test: true,
+        describe: true,
+        expect: true
       },
       parserOptions: {
         ecmaVersion: 'latest',
