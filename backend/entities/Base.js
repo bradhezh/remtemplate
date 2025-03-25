@@ -12,15 +12,13 @@ const schema = new EntitySchema({
   // to be instantiated
   name: 'Base',
   properties: {
-    /*
     id: {
       // values of the numeric primary key can be auto-generated from the db
       // (autoincrement), unless "autoincrement: false" is specified
       primary: true,
       type: 'number',
     },
-    */
-    /* mongo */
+    /* mongo
     _id: {
       // the primary key for mongo; (could-be) auto-generated
       primary: true,
@@ -32,6 +30,7 @@ const schema = new EntitySchema({
       serializedPrimaryKey: true,
       type: 'string',
     },
+    */
     createdAt: {
       type: 'Date',
       lazy: true,
