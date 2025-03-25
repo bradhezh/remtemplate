@@ -13,6 +13,7 @@ export default defineConfig({
     commonjs(),
   ],
   test: {
+    // making test functions such as describe, test, and expect global
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/tests/setupTests.js',

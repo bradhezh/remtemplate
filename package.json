@@ -15,10 +15,12 @@
     "lint": "eslint .",
     "test:be": "cd backend && NODE_ENV=test node --test",
     "test:fe": "cd frontend && vitest run",
+    "test": "npm run test:be && npm run test:fe",
     "preview": "vite preview"
   },
   "dependencies": {
     "@mikro-orm/better-sqlite": "^6.4.11",
+    "@mikro-orm/cli": "^6.4.11",
     "@mikro-orm/core": "^6.4.11",
     "@mikro-orm/migrations": "^6.4.11",
     "axios": "^1.8.4",
@@ -30,7 +32,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
-    "@mikro-orm/cli": "^6.4.11",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@types/react": "^19.0.10",
