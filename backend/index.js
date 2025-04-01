@@ -1,4 +1,5 @@
 const conf = require('./conf')
+const log = require('./utils/log')
 const {
   app,
   init,
@@ -8,8 +9,8 @@ const {
   await init()
 
   app.listen(conf.PORT, () => {
-    console.log(`the server is running on ${conf.PORT}`)
+    log.info(`the server is running on ${conf.PORT}`)
   })
 } catch (err) {
-  console.log(`${err.name}: ${err.message}`)
+  log.error(`${err.name}: ${err.message}`)
 }})()

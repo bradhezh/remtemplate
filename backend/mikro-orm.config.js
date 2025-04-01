@@ -20,10 +20,10 @@ module.exports = defineConfig({
   /* can be inferred from the package imported
   driver: BetterSqliteDriver,
   */
-  dbName: conf.NODE_ENV === conf.NODE_ENV_TST ? 'test.sqlite' : 'data.sqlite',
+  dbName:
+    conf.NODE_ENV === conf.NODE_ENV_TST ? conf.DB_NAME_TEST : conf.DB_NAME,
   /* mysql
   host: 'host',
-  dbName: 'database',
   user: 'user',
   password: 'password',
   */

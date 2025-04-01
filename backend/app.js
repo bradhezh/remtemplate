@@ -6,6 +6,8 @@ const {
 } = require('@mikro-orm/core')
 
 const conf = require('./conf')
+const log = require('./utils/log')
+const middleware = require('./utils/middleware')
 // export before circular dependency
 const DI = {}
 module.exports = {
@@ -16,10 +18,24 @@ const itemsRouter = require('./controllers/items')
 const app = express()
 
 const init = async () => {
-  // relative to cwd
+  if (conf.SECRETS_HOST) {
+    await conf.fetchSecrets()
+  }
+
+  // give static (corresponding files) priority over subsequent middleware for
+  // GET; the path is relative to cwd
   app.use(express.static('../dist'))
+  // deserialise json in requests into req.body
   app.use(express.json())
 
+  app.use(middleware.reqLogger)
+
+  // middleware mounted by app.<method>(...) is called (valid) only if requests
+  // match the method and path (route) exactly (only with minor tolerance like
+  // trailing slash), while app.use(...) results in prefix-based matching and
+  // the matched prefix being stripped from req.url before passing it to
+  // middleware
+  // overridden by ../dist/index.html
   app.get('/', (req, res) => {
     res.send('<h1>Hello world!</h1>')
   })
@@ -30,13 +46,18 @@ const init = async () => {
 
   DI.db = await MikroORM.init()
   DI.em = DI.db.em
-  console.log('the database is connected')
+  log.info('the database is connected')
   // just before middleware using an em
   app.use((req, res, next) => {
     RequestContext.create(DI.em, next)
   })
 
+  // prefix matching, meaning the route here should be excluded in routes to be
+  // matched in the router (with its req.url)
   app.use(conf.ITEMS_EP, itemsRouter)
+
+  app.use(middleware.unknownEp)
+  app.use(middleware.errHandler)
 }
 
 module.exports.app = app

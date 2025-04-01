@@ -21,6 +21,7 @@ jobs:
       - run: npm i
       - run: npm run lint
       - name: Test
+        # testing sensitive configs as env vars in the pipeline
         env:
           DB_URL_TEST: ${{ secrets.DB_URL_TEST }}
         run: npm test
