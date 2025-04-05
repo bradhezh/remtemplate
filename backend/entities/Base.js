@@ -1,6 +1,4 @@
-const {
-  EntitySchema,
-} = require('@mikro-orm/core')
+const {EntitySchema} = require('@mikro-orm/core')
 
 class Base {
   constructor() {

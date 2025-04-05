@@ -1,10 +1,6 @@
-const {
-  EntitySchema,
-} = require('@mikro-orm/core')
+const {EntitySchema} = require('@mikro-orm/core')
 
-const {
-  Base,
-} = require('./Base')
+const {Base} = require('./Base')
 
 class Item extends Base {
   // constructors are never called for entities loaded from dbs

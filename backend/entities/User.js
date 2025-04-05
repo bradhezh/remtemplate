@@ -1,16 +1,11 @@
-const {
-  EntitySchema,
-  Collection,
-  Cascade,
-} = require('@mikro-orm/core')
+const {EntitySchema, Collection, Cascade} = require('@mikro-orm/core')
 
-const {
-  Base,
-} = require('./Base')
+const {Base} = require('./Base')
 
 class User extends Base {
   constructor(user) {
     super()
+    this.username = user.username
     this.name = user.name
     this.items = new Collection(this)
   }
@@ -20,15 +15,17 @@ const schema = new EntitySchema({
   class: User,
   extends: 'Base',
   properties: {
-    name: {
+    username: {
       type: 'string',
       unique: true,
+    },
+    name: {
+      type: 'string',
     },
     password: {
       type: 'string',
       lazy: true,
       hidden: true,
-      default: '',
     },
     items: {
       kind: '1:m',

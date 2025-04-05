@@ -34,19 +34,26 @@ const errHandler = (err, req, res, next) => {
     // causing frontend axios to throw an "error" including the object (via
     // json) as error.response.data
     res.status(conf.HTTP_BAD_REQ).json({
-      error: conf.ERR_UNIQUE_MSG,
+      message: conf.ERR_UNIQUE_MSG,
     })
     return
   }
   if (err.name === conf.ERR_NULL) {
     res.status(conf.HTTP_BAD_REQ).json({
-      error: conf.ERR_NULL_MSG,
+      message: conf.ERR_NULL_MSG,
     })
     return
   }
   if (err.name === conf.ERR_VALID) {
     res.status(conf.HTTP_BAD_REQ).json({
-      error: conf.ERR_VALID_MSG,
+      message: conf.ERR_VALID_MSG,
+    })
+    return
+  }
+
+  if (err.name === conf.ERR_APP) {
+    res.status(err.status).json({
+      message: err.message,
     })
     return
   }

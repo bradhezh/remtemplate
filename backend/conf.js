@@ -10,9 +10,10 @@ conf.NODE_ENV_DEV = 'development'
 conf.NODE_ENV_TST = 'test'
 
 // the env var is set by dotenv in local development, or auto set in the cloud;
-// a default value (3000 here) should be provided for other envs like cicd
-// pipelines
+// default values should be provided for other envs like cicd pipelines
 conf.PORT = process.env.PORT || 3000
+conf.SECRET = process.env.SECRET || 'alskjfeoicvinef'
+conf.SALT = Number(process.env.SALT) || 10
 
 // the env vars are only set in the cloud with sensitive configs stored in its
 // secret service (only on azure or aws so far)

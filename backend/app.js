@@ -1,9 +1,6 @@
 const express = require('express')
 require('express-async-errors')
-const {
-  MikroORM,
-  RequestContext,
-} = require('@mikro-orm/core')
+const {MikroORM, RequestContext} = require('@mikro-orm/core')
 
 const conf = require('./conf')
 const log = require('./utils/log')
@@ -13,6 +10,8 @@ const DI = {}
 module.exports = {
   DI,
 }
+const loginRouter = require('./controllers/login')
+const usersRouter = require('./controllers/users')
 const itemsRouter = require('./controllers/items')
 
 const app = express()
@@ -54,6 +53,8 @@ const init = async () => {
 
   // prefix matching, meaning the route here should be excluded in routes to be
   // matched in the router (with its req.url)
+  app.use(conf.LOGIN_EP, loginRouter)
+  app.use(conf.USERS_EP, usersRouter)
   app.use(conf.ITEMS_EP, itemsRouter)
 
   app.use(middleware.unknownEp)
