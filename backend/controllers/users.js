@@ -2,7 +2,8 @@ const usersRouter = require('express').Router()
 const bcrypt = require('bcrypt')
 
 const conf = require('../conf')
-const AppErr = require('../utils/AppErr')
+const {AppErr} = require('../utils/errors')
+const Auth = require('../utils/auth')
 const {DI} = require('../app')
 const {User} = require('../entities/User')
 
@@ -16,15 +17,13 @@ const {User} = require('../entities/User')
 //  username: string/unique,
 //  name: string,
 //}]
-/*
-usersRouter.get('/', auth([
-  conf.ADMIN,
-]), async (req, res) => {
+usersRouter.get('/', Auth({
+  requiredRoles: [conf.ADMIN_ROLE],
+}), async (req, res) => {
   const users = await DI.em.find(User)
 
   res.json(users)
 })
-*/
 
 // get the user with a specified username
 //request: '/api/users/name/:name' {
@@ -36,17 +35,13 @@ usersRouter.get('/', auth([
 //  username: string/unique,
 //  name: string,
 //}
-/*
-usersRouter.get(conf.BY_NAME, auth([
-  conf.ADMIN,
-]), async (req, res) => {
-  const user = await DI.em.findOneOrFail(User, {
-    username: req.params.name,
-  })
+usersRouter.get(conf.BY_NAME, Auth({
+  requiredRoles: [conf.ADMIN_ROLE],
+}), async (req, res) => {
+  const user = await DI.em.findOneOrFail(User, {username: req.params.name})
 
   res.json(user)
 })
-*/
 
 // create a user
 //request: '/api/users' {
@@ -71,19 +66,18 @@ usersRouter.post('/', async (req, res) => {
 //request: '/api/users' {
 //  // only for Admin
 //  Authorization: Bearer token,
-//} [
-//  id: number/unique,
-//]
+//} {
+//  id: {
+//    $in: [
+//      id: number/unique,
+//    ],
+//  },
+//}
 //response: HTTP_SUCC count:number
-/*
-usersRouter.delete('/', auth([
-  conf.ADMIN,
-]), async (req, res) => {
-  const users = await DI.em.find(User, {
-    id: {
-      $in: req.body,
-    },
-  })
+usersRouter.delete('/', Auth({
+  requiredRoles: [conf.ADMIN_ROLE],
+}), async (req, res) => {
+  const users = await DI.em.find(User, req.body)
   for (const user of users) {
     DI.em.remove(user)
   }
@@ -91,7 +85,6 @@ usersRouter.delete('/', auth([
 
   res.status(conf.HTTP_SUCC).json(users.length)
 })
-*/
 
 // modify the request user
 //request: '/api/users' {
@@ -102,21 +95,16 @@ usersRouter.delete('/', auth([
 //  password: string/conf.PASSWD_MIN+,
 //}
 //response: HTTP_NO_CONT
-/*
-usersRouter.put('/', auth(), async (req, res) => {
+usersRouter.put('/', Auth({}), async (req, res) => {
   if (req.body.password.length < conf.PASSWD_MIN) {
     throw new AppErr(conf.HTTP_BAD_REQ, conf.ERR_PASSWD)
   }
   req.body.password = await bcrypt.hash(req.body.password, conf.SALT)
 
-  // AsyncLocalStorage persists and is accessible throughout its async context,
-  // which includes all sync funcs and async ones chained on the initial one,
-  // meaning the user from auth() handler is still managed in this em
   Object.assign(req.user, req.body)
   await DI.em.flush()
 
   res.status(conf.HTTP_NO_CONT).end()
 })
-*/
 
 module.exports = usersRouter

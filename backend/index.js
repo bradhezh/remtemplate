@@ -1,9 +1,6 @@
 const conf = require('./conf')
 const log = require('./utils/log')
-const {
-  app,
-  init,
-} = require('./app')
+const {app, init} = require('./app')
 
 ;(async () => {try {
   await init()

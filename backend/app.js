@@ -7,9 +7,7 @@ const log = require('./utils/log')
 const middleware = require('./utils/middleware')
 // export before circular dependency
 const DI = {}
-module.exports = {
-  DI,
-}
+module.exports = {DI}
 const loginRouter = require('./controllers/login')
 const usersRouter = require('./controllers/users')
 const itemsRouter = require('./controllers/items')
@@ -27,7 +25,9 @@ const init = async () => {
   // deserialise json in requests into req.body
   app.use(express.json())
 
-  app.use(middleware.reqLogger)
+  if (conf.NODE_ENV === conf.NODE_ENV_DEV) {
+    app.use(middleware.reqLogger)
+  }
 
   // middleware mounted by app.<method>(...) is called (valid) only if requests
   // match the method and path (route) exactly (only with minor tolerance like
@@ -45,7 +45,7 @@ const init = async () => {
 
   DI.db = await MikroORM.init()
   DI.em = DI.db.em
-  log.info('the database is connected')
+  log.dev('the database is connected')
   // just before middleware using an em
   app.use((req, res, next) => {
     RequestContext.create(DI.em, next)

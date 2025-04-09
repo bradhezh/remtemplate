@@ -3,6 +3,10 @@ require('dotenv').config()
 
 const conf = require('../conf')
 
+conf.TOKEN_EXPIRE = 24 * 60 * 60
+conf.ADMIN_ROLE = 'Admin'
+conf.OWNER_ROLE = 'Owner'
+
 // the env var is set by cli
 conf.NODE_ENV = process.env.NODE_ENV
 conf.NODE_ENV_PRO = 'production'
@@ -13,7 +17,9 @@ conf.NODE_ENV_TST = 'test'
 // default values should be provided for other envs like cicd pipelines
 conf.PORT = process.env.PORT || 3000
 conf.SECRET = process.env.SECRET || 'alskjfeoicvinef'
-conf.SALT = Number(process.env.SALT) || 10
+conf.SALT = Number(process.env.SALT) || 5
+conf.ADMIN_INIT_USER = process.env.ADMIN_INIT_USER || 'admin'
+conf.ADMIN_INIT_PASSWD = process.env.ADMIN_INIT_PASSWD || '88888888'
 
 // the env vars are only set in the cloud with sensitive configs stored in its
 // secret service (only on azure or aws so far)
@@ -35,7 +41,6 @@ if (!conf.SECRETS_HOST) {
   conf.DB_URL = process.env.DB_URL
   conf.DB_URL_TEST = process.env.DB_URL_TEST
   */
-
 } else {
   /* with SECRETS_HOST set, (non-testing) sensitive configs should be fetched
     from the secret service; note that the fetching func is "async" and needs to

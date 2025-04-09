@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const conf = require('../conf')
-const AppErr = require('../utils/AppErr')
+const {AppErr} = require('../utils/errors')
 const {DI} = require('../app')
 const {User} = require('../entities/User')
 

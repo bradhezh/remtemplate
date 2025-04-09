@@ -12,11 +12,10 @@ class Item extends Base {
 }
 
 const schema = new EntitySchema({
-  class: Item,
+  class: Item, extends: 'Base',
   /*
   tableName: 'items',
   */
-  extends: 'Base',
   properties: {
     name: {
       type: 'string',
@@ -37,14 +36,12 @@ const schema = new EntitySchema({
       unique: true,
       /*
       index: true,
+      nullable: true,
       */
       /* the default value for the column rather than the property, which can
         therefore be auto-generated from the column if no value is specified, or
         remain invalid if being nullable
       default: '',
-      */
-      /*
-      nullable: true,
       */
       /* excluded in queries by default; can be included via populating
         (em.populate(item, ['lazy_prop_name']))
@@ -73,7 +70,4 @@ const schema = new EntitySchema({
   },
 })
 
-module.exports = {
-  Item,
-  schema,
-}
+module.exports = {Item, schema}

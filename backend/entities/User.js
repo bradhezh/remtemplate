@@ -1,4 +1,4 @@
-const {EntitySchema, Collection, Cascade} = require('@mikro-orm/core')
+const {EntitySchema, Collection/*, Cascade*/} = require('@mikro-orm/core')
 
 const {Base} = require('./Base')
 
@@ -8,29 +8,20 @@ class User extends Base {
     this.username = user.username
     this.name = user.name
     this.items = new Collection(this)
+    this.roles = new Collection(this)
   }
 }
 
 const schema = new EntitySchema({
-  class: User,
-  extends: 'Base',
+  class: User, extends: 'Base',
   properties: {
-    username: {
-      type: 'string',
-      unique: true,
-    },
-    name: {
-      type: 'string',
-    },
-    password: {
-      type: 'string',
-      lazy: true,
-      hidden: true,
-    },
+    username: {type: 'string', unique: true},
+    name: {type: 'string'},
+    password: {type: 'string', lazy: true, hidden: true},
     items: {
       kind: '1:m',
       type: 'Item',
-      // the inverse side; meaning mapped by item.user
+      // the inverse side; meaning mapped by Item.user
       mappedBy: 'user',
       /* creation cascade by default
       cascade: [
@@ -46,10 +37,8 @@ const schema = new EntitySchema({
       orphanRemoval: true,
       */
     },
+    roles: {kind: 'm:n', type: 'Role'},
   },
 })
 
-module.exports = {
-  User,
-  schema,
-}
+module.exports = {User, schema}
