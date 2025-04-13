@@ -4,7 +4,11 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [{
-  ignores: ['dist', 'backend/migrations*'],
+  ignores: [
+    'dist',
+    'backend/migrations*', 'backend/db/Migration*',
+    'backend/db/migrations*', 'backend/db/*/migrations*',
+  ],
 }, {
   files: ['**/*.{js,jsx}'],
   languageOptions: {
@@ -25,7 +29,10 @@ export default [{
     'no-trailing-spaces': 'error', 'linebreak-style': ['error', 'unix'],
     'indent': ['warn', 2],
     'quotes': ['error', 'single'], 'semi': ['error', 'never'],
-    'eqeqeq': 'error', 'no-unused-vars': 'error',
+    'eqeqeq': 'error',
+    'no-unused-vars': [
+      'error', {varsIgnorePattern: '^[A-Z_]'},
+    ],
     'no-constant-condition': 'warn',
     'react-refresh/only-export-components': [
       'warn', {allowConstantExport: true},

@@ -3,17 +3,16 @@ Object.defineProperty(exports, '__esModule', { value: true });
 const { Migration } = require('@mikro-orm/migrations');
 const bcrypt = require('bcrypt')
 
-const conf = require('../conf')
+const conf = require('../../conf')
+const {AUTH_ADMIN_ROLE} = require('../../middleware/conf')
 
-class Migration20250407085235 extends Migration {
+class Migration20250412013746 extends Migration {
 
   async up() {
-    await this.execute(`create table \`base\` (\`id\` integer not null primary key autoincrement, \`created_at\` datetime not null, \`updated_at\` datetime not null);`);
-
     await this.execute(`create table \`role\` (\`id\` integer not null primary key autoincrement, \`created_at\` datetime not null, \`updated_at\` datetime not null, \`name\` text not null);`);
     await this.execute(`create unique index \`role_name_unique\` on \`role\` (\`name\`);`);
 
-    await this.execute(`create table \`user\` (\`id\` integer not null primary key autoincrement, \`created_at\` datetime not null, \`updated_at\` datetime not null, \`username\` text not null, \`name\` text not null, \`password\` text not null);`);
+    await this.execute(`create table \`user\` (\`id\` integer not null primary key autoincrement, \`created_at\` datetime not null, \`updated_at\` datetime not null, \`username\` text not null, \`name\` text not null, \`password\` text not null, \`email\` text not null);`);
     await this.execute(`create unique index \`user_username_unique\` on \`user\` (\`username\`);`);
 
     await this.execute(`create table \`item\` (\`id\` integer not null primary key autoincrement, \`created_at\` datetime not null, \`updated_at\` datetime not null, \`name\` text not null, \`user_id\` integer null, constraint \`item_user_id_foreign\` foreign key(\`user_id\`) references \`user\`(\`id\`) on delete set null on update cascade);`);
@@ -28,24 +27,21 @@ class Migration20250407085235 extends Migration {
     const roleid = await this.execute(
       `insert into role (created_at, updated_at, name)
       values (
-        strftime('%s', 'now'),
-        strftime('%s', 'now'),
-        '${conf.ADMIN_ROLE}'
-      ) returning id;`)
+        strftime('%s', 'now'), strftime('%s', 'now'),
+        '${AUTH_ADMIN_ROLE}')
+      returning id;`)
     const password = await bcrypt.hash(conf.ADMIN_INIT_PASSWD, conf.SALT)
     const userid = await this.execute(
-      `insert into user (created_at, updated_at, username, name, password)
+      `insert into user (
+        created_at, updated_at, username, name, password, email)
       values (
-        strftime('%s', 'now'),
-        strftime('%s', 'now'),
-        '${conf.ADMIN_INIT_USER}',
-        '',
-        '${password}'
-      ) returning id;`)
+        strftime('%s', 'now'), strftime('%s', 'now'),
+        '${conf.ADMIN_INIT_USER}', '', '${password}', '')
+      returning id;`)
     this.execute(
       `insert into user_roles (user_id, role_id)
       values (${userid[0].id}, ${roleid[0].id});`)
   }
 
 }
-exports.Migration20250407085235 = Migration20250407085235;
+exports.Migration20250412013746 = Migration20250412013746;

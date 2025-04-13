@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+# .env might include sensitive configs
+.env
 *.sqlite
 
 .dockerignore

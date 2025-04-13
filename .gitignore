@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-# .env is typically for sensitive configs
+# .env might include sensitive configs
 .env
 *.sqlite
 

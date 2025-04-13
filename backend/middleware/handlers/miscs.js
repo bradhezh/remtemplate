@@ -1,22 +1,23 @@
 const path = require('path')
 
 const conf = require('../conf')
-const log = require('./log')
+const log = require('../utils/log')
 
 // before requests are handled by controllers
 const reqLogger = (req, res, next) => {
-  log.info(req.method, req.path, req.body)
-  // pass control to controllers
+  log.debug(req.method, req.path, req.body)
+  if (conf.NODE_ENV === conf.NODE_ENV_DEV) {
+    log.debug(req.body)
+  }
   next()
 }
 
 // the default handler
 const unknownEp = (req, res) => {
-  log.dev('unknown endpoint')
-
-  // in spa, site routes are handled by frontend, so for any unknown endpoint,
-  // the page should be sent back for the frontend to handle the route
-  res.sendFile(path.join(process.cwd(), '../dist/index.html'))
+  log.debug('unknown endpoint')
+  if (conf.UNEP_SPA) {
+    res.sendFile(path.join(process.cwd(), conf.UNEP_SPA))
+  }
 }
 
 const errHandler = (err, req, res, next) => {
@@ -27,8 +28,6 @@ const errHandler = (err, req, res, next) => {
     return
   }
   if (err.name === conf.ERR_UNIQUE) {
-    // causing frontend axios to throw an "error" including the object (via
-    // json) as error.response.data
     res.status(conf.HTTP_BAD_REQ).json({message: conf.ERR_UNIQUE_MSG})
     return
   }
@@ -53,12 +52,20 @@ const errHandler = (err, req, res, next) => {
     return
   }
 
-  if (err.name === conf.ERR_APP) {
+  if (err.name === conf.ERR_LOG) {
+    console.error(new Date(), ':', 'error:', err.message)
+    res.status(conf.HTTP_INTERNAL).end()
+    return
+  }
+  if (err.name === conf.ERR_MIDDLEWARE) {
+    if (err.status === conf.HTTP_INTERNAL) {
+      res.status(conf.HTTP_INTERNAL).end()
+      return
+    }
     res.status(err.status).json({message: err.message})
     return
   }
 
-  // pass to the default one
   next(err)
 }
 

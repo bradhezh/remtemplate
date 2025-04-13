@@ -2,10 +2,10 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 const { Migration } = require('@mikro-orm/migrations-mongodb');
 
-class Migration20250325065625 extends Migration {
+class Migration20250412013809 extends Migration {
 
   async up() {
   }
 
 }
-exports.Migration20250325065625 = Migration20250325065625;
+exports.Migration20250412013809 = Migration20250412013809;

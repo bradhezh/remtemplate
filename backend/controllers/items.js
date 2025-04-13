@@ -1,5 +1,4 @@
 const itemsRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
 
 const conf = require('../conf')
 const {AppErr} = require('../utils/errors')
@@ -91,7 +90,7 @@ itemsRouter.delete('/', Auth({
   }
   await DI.em.flush()
 
-  res.status(conf.HTTP_SUCC).json(items.length)
+  res.status(conf.HTTP_SUCC).json(req.resources.length)
 
   /* or
   const count = await DI.em.nativeDelete(Item, req.body)

@@ -1,11 +1,8 @@
-import {useState} from 'react'
+import {useState, useCallback} from 'react'
 
-import useUser from './useUser'
 import usersSvc from '../services/users'
 
 const useUsers = () => {
-  const {user} = useUser()
-
   //[{
   //  id: number/unique,
   //  username: string/unique,
@@ -18,16 +15,16 @@ const useUsers = () => {
   //  name: string,
   //  password: string/conf.PASSWD_MIN+,
   //}
-  const signup = async (user) => {
+  const signup = useCallback(async (user) => {
     await usersSvc.create(user)
-  }
+  }, [])
 
   //user: {
   //  username: string/unique,
   //  name: string,
   //  password: string/conf.PASSWD_MIN+,
   //}
-  const createUser = async (user) => {
+  const createUser = useCallback(async (user) => {
     const id = await usersSvc.create(user)
     setUsers([
       ...users, {
@@ -36,7 +33,7 @@ const useUsers = () => {
         password: undefined,
       },
     ])
-  }
+  }, [users])
 
   return {
     users,

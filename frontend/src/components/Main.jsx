@@ -20,8 +20,7 @@ const Main = () => {
       console.log('cleanup')
     }
     */
-  }, [
-  ])
+  }, [getItems])
 
   return (
     <div>

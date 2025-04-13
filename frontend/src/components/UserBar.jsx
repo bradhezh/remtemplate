@@ -1,6 +1,5 @@
 import {useNavigate, Link} from 'react-router-dom'
 
-import conf from '../../../conf'
 import Notif from './Notif'
 import useUser from '../controllers/useUser'
 

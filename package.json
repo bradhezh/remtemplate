@@ -8,13 +8,19 @@
     "test:fe": "cd frontend && vitest run",
     "start:dev": "cd backend && NODE_ENV=development nodemon index.js",
     "start:pro": "cd backend && NODE_ENV=production node index.js",
+    "start:pro:dbg": "cd backend && NODE_ENV=debug node index.js",
     "test:be": "cd backend && NODE_ENV=test node --test",
-    "migration": "cd backend && mikro-orm migration:create",
-    "migration:tst": "cd backend && NODE_ENV=test mikro-orm migration:create",
-    "migrate": "cd backend && mikro-orm migration:up",
-    "migrate:tst": "cd backend && NODE_ENV=test mikro-orm migration:up",
-    "start": "npm run migrate && npm run start:pro",
-    "test": "npm run migrate:tst && npm run test:be && npm run test:fe",
+    "mig:create": "cd backend && mikro-orm migration:create",
+    "mig:create:log": "cd backend && mikro-orm migration:create --config db/log/mikro-orm.config.js",
+    "mig:create:tst": "cd backend && NODE_ENV=test mikro-orm migration:create",
+    "mig:create:log:tst": "cd backend && NODE_ENV=test mikro-orm migration:create --config db/log/mikro-orm.config.js",
+    "mig:up": "cd backend && mikro-orm migration:up",
+    "mig:up:log": "cd backend && mikro-orm migration:up --config db/log/mikro-orm.config.js",
+    "mig:up:tst": "cd backend && NODE_ENV=test mikro-orm migration:up",
+    "mig:up:log:tst": "cd backend && NODE_ENV=test mikro-orm migration:up --config db/log/mikro-orm.config.js",
+    "start": "npm run mig:up && npm run mig:up:log && npm run start:pro",
+    "start:dbg": "npm run mig:up && npm run mig:up:log && npm run start:pro:dbg",
+    "test": "npm run mig:up:tst && npm run mig:up:log:tst && npm run test:be && npm run test:fe",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -54,5 +60,10 @@
     "vite": "^6.2.4",
     "vite-plugin-commonjs": "^0.10.4",
     "vitest": "^3.0.9"
+  },
+  "mikro-orm": {
+    "configPaths": [
+      "db/mikro-orm.config.js"
+    ]
   }
 }
