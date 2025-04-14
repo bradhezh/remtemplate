@@ -27,7 +27,9 @@ const Auth = ({
   requiredRoles, or = false,
   rscClass, rscFilter = 'id', rscSearch = false, rscUser, rscUserSingle = true,
 }) => {
+
   return async (req, res, next) => {
+
     if (!DI.jwtSecret || !DI.em) {
       log.error('authorisation not initialised yet')
       throw new MiddlewareErr(conf.HTTP_UNAUTHED, conf.ERR_AUTH)
@@ -60,6 +62,7 @@ const Auth = ({
 }
 
 const getUser = async ({req}) => {
+
   let token
   if (!conf.TOKEN_IN_COOKIE) {
     token = req.get('authorization')?.replace('Bearer ', '')
@@ -96,6 +99,7 @@ const authRoles = async ({
   userRoles, requiredRoles, or,
   rscClass, rscFilter, rscSearch, rscUser, rscUserSingle, req,
 }) => {
+
   for (const role of requiredRoles) {
     if (role !== conf.AUTH_OWNER_ROLE) {
       const roleAuthed = userRoles.includes(role)
@@ -135,6 +139,7 @@ const authRoles = async ({
 const authRscs = async ({
   rscClass, rscFilter, rscSearch, rscUser, rscUserSingle, req,
 }) => {
+
   if (!rscUser) {
     rscUser = rscUserSingle ? 'user' : 'users'
   }
@@ -143,8 +148,8 @@ const authRscs = async ({
 
   for (const resource of req.resources) {
     if (
-      rscUserSingle && resource[rscUser] !== user
-      || !rscUserSingle && !resource[rscUser].includes(user)
+      rscUserSingle && resource[rscUser] !== req.user
+      || !rscUserSingle && !resource[rscUser].includes(req.user)
     ) {
       return false
     }
@@ -154,6 +159,7 @@ const authRscs = async ({
 }
 
 const getRscs = async ({rscClass, rscFilter, rscSearch, rscUser, req}) => {
+
   if (rscSearch) {
     req.resource = await DI.em.find(rscClass, req.body, {
       populate: !rscUser ? [] : [rscUser],

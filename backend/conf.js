@@ -18,14 +18,14 @@ conf.NODE_ENV = process.env.NODE_ENV
 conf.PORT = Number(process.env.PORT) || 3000
 conf.TOKEN_EXPIRE= Number(process.env.TOKEN_EXPIRE) || 86400
 conf.SALT = Number(process.env.SALT) || 5
-conf.PASSWORD_MIN = Number(process.env.PASSWORD_MIN) || 8
 conf.ADMIN_INIT_USERNAME = process.env.ADMIN_INIT_USERNAME || 'admin'
 conf.ADMIN_INIT_PASSWORD = process.env.ADMIN_INIT_PASSWORD || '88888888'
 // test-only; also flexible or sensitive for testing
 conf.DB_NAME_TEST = process.env.DB_NAME_TEST
 conf.DB_URL_LOG_TEST = process.env.DB_URL_LOG_TEST
 
-conf.ERR_PASSWORD = `Password must be at least ${conf.PASSWORD_MIN} characters`
+conf.ERR_USERS_PASSWORD =
+  `Password must be at least ${conf.PASSWORD_MIN} characters`
 
 // only set in the cloud with production high security demanded configs stored
 // in its secret service (only on azure or aws so far)

@@ -17,6 +17,7 @@ const {Item} = require('../entities/Item')
 //  name: string/unique,
 //}]
 itemsRouter.get('/', async (req, res) => {
+
   // same to DI.db.em
   const items = await DI.em.find(Item)
 
@@ -32,6 +33,7 @@ itemsRouter.get('/', async (req, res) => {
 //  name: string/unique,
 //}]
 itemsRouter.get(conf.BY_USER, Auth({}), async (req, res) => {
+
   await DI.em.populate(req.user, ['items'])
 
   res.json(req.user.items)
@@ -44,6 +46,7 @@ itemsRouter.get(conf.BY_USER, Auth({}), async (req, res) => {
 //  name: string/unique,
 //}
 itemsRouter.get(conf.BY_ID, async (req, res) => {
+
   const item = await DI.em.findOneOrFail(Item, req.params.id)
 
   res.json(item)
@@ -63,6 +66,7 @@ itemsRouter.get(conf.BY_ID, async (req, res) => {
 itemsRouter.post('/', Auth({
   requiredRoles: [conf.ADMIN_ROLE],
 }), async (req, res) => {
+
   const item = DI.em.create(Item, req.body)
   await DI.em.flush()
 
@@ -85,6 +89,7 @@ itemsRouter.delete('/', Auth({
   requiredRoles: [conf.ADMIN_ROLE, conf.OWNER_ROLE], or: true,
   resourceClass: Item, resourceSearch: true,
 }), async (req, res) => {
+
   for (const item of req.resources) {
     DI.em.remove(item)
   }
@@ -110,6 +115,7 @@ itemsRouter.put(conf.BY_ID, Auth({
   requiredRoles: [conf.ADMIN_ROLE, conf.OWNER_ROLE], or: true,
   resourceClass: Item,
 }), async (req, res) => {
+
   Object.assign(req.resources[0], req.body)
   await DI.em.flush()
 

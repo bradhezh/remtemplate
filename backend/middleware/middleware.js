@@ -1,20 +1,16 @@
 const conf = require('./conf')
-
 const DI = {}
 module.exports = {DI}
 const log = require('./utils/log')
-const reqLogger = require('./handlers/miscs')
-const unknownEp = require('./handlers/miscs')
-const errHandler = require('./handlers/miscs')
+const {MiddlewareErr} = require('./utils/errors')
+const {reqLogger, unknownEp, errHandler} = require('./handlers/miscs')
 const Auth = require('./handlers/auth')
 const loginRouter = require('./controllers/login')
 const usersRouter = require('./controllers/users')
 const rolesRouter = require('./controllers/roles')
 
 //param: {
-//  em,
-//  getLogEm,
-//  jwtSecret,
+//  em, getLogEm, jwtSecret
 //}
 const init = (param) => {
   Object.assign(DI, param)
@@ -56,8 +52,8 @@ const config = (param) => {
 }
 
 module.exports = {
-  init, config,
-  log,
+  DI, init, config,
+  log, MiddlewareErr,
   reqLogger, unknownEp, errHandler, Auth,
   loginRouter, usersRouter, rolesRouter,
 }

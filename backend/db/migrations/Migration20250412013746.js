@@ -30,13 +30,13 @@ class Migration20250412013746 extends Migration {
         strftime('%s', 'now'), strftime('%s', 'now'),
         '${AUTH_ADMIN_ROLE}')
       returning id;`)
-    const password = await bcrypt.hash(conf.ADMIN_INIT_PASSWD, conf.SALT)
+    const password = await bcrypt.hash(conf.ADMIN_INIT_PASSWORD, conf.SALT)
     const userid = await this.execute(
       `insert into user (
         created_at, updated_at, username, name, password, email)
       values (
         strftime('%s', 'now'), strftime('%s', 'now'),
-        '${conf.ADMIN_INIT_USER}', '', '${password}', '')
+        '${conf.ADMIN_INIT_USERNAME}', '', '${password}', '')
       returning id;`)
     this.execute(
       `insert into user_roles (user_id, role_id)

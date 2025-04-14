@@ -3,18 +3,17 @@ require('express-async-errors')
 const {MikroORM, RequestContext} = require('@mikro-orm/core')
 
 const conf = require('./conf')
-const log = require('./utils/log')
-const middleware = require('./utils/middleware')
+const middleware = require('./middleware/middleware')
 // export before circular dependency
 const DI = {}
 module.exports = {DI}
-const loginRouter = require('./controllers/login')
 const usersRouter = require('./controllers/users')
-const itemsRouter = require('./controllers/items')
+//const itemsRouter = require('./controllers/items')
 
 const app = express()
 
 const init = async () => {
+
   if (conf.SECRETS_HOST) {
     await conf.fetchSecrets()
   }
@@ -25,9 +24,7 @@ const init = async () => {
   // deserialise json in requests into req.body
   app.use(express.json())
 
-  if (conf.NODE_ENV === conf.NODE_ENV_DEV) {
-    app.use(middleware.reqLogger)
-  }
+  app.use(middleware.reqLogger)
 
   // middleware mounted by app.<method>(...) is called (valid) only if requests
   // match the method and path (route) exactly (only with minor tolerance like
@@ -45,7 +42,11 @@ const init = async () => {
 
   DI.db = await MikroORM.init()
   DI.em = DI.db.em
-  log.dev('the database is connected')
+  middleware.config(conf)
+  middleware.init({
+    em: DI.em, getLogEm: () => DI.em.fork(), jwtSecret: conf.SECRET
+  })
+  middleware.log.info('the database is connected')
   // just before middleware using an em
   app.use((req, res, next) => {
     RequestContext.create(DI.em, next)
@@ -53,13 +54,13 @@ const init = async () => {
 
   // prefix matching, meaning the route here should be excluded in routes to be
   // matched in the router (with its req.url)
-  app.use(conf.LOGIN_EP, loginRouter)
+  app.use(conf.LOGIN_EP, middleware.loginRouter)
   app.use(conf.USERS_EP, usersRouter)
-  app.use(conf.ITEMS_EP, itemsRouter)
+  app.use(conf.USERS_EP, middleware.usersRouter)
+  //app.use(conf.ITEMS_EP, itemsRouter)
 
   app.use(middleware.unknownEp)
   app.use(middleware.errHandler)
 }
 
-module.exports.app = app
-module.exports.init = init
+module.exports = {DI, app, init}

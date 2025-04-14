@@ -7,10 +7,8 @@ class Migration20250412013754 extends Migration {
   async up() {
     const logs = this.getCollection('log')
     await logs.insertMany([{
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      type: 'info',
-      message: 'init log',
+      createdAt: new Date(), updatedAt: new Date(),
+      type: 'info', message: 'init log',
     }])
   }
 

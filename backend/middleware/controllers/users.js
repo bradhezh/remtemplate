@@ -19,6 +19,7 @@ const {DI} = require('../middleware')
 usersRouter.get('/', Auth({
   requiredRoles: [conf.AUTH_ADMIN_ROLE],
 }), async (req, res) => {
+
   const users = await DI.em.find(conf.USER_CLASS, {}, {
     populate: [conf.USER_ROLES],
   })
@@ -37,6 +38,7 @@ usersRouter.get('/', Auth({
 usersRouter.get(conf.BY_ROLE, Auth({
   requiredRoles: [conf.AUTH_ADMIN_ROLE],
 }), async (req, res) => {
+
   const role = await DI.em.findOneOrFail(conf.ROLE_CLASS, req.params.id, {
     populate: [conf.ROLE_USERS],
   })
@@ -56,6 +58,7 @@ usersRouter.get(conf.BY_ROLE, Auth({
 usersRouter.get(conf.BY_ID, Auth({
   requiredRoles: [conf.AUTH_ADMIN_ROLE],
 }), async (req, res) => {
+
   const user = await DI.em.findOneOrFail(conf.USER_CLASS, req.params.id, {
     populate: [conf.USER_ROLES],
   })
@@ -75,6 +78,7 @@ usersRouter.get(conf.BY_ID, Auth({
 usersRouter.get(conf.BY_NAME, Auth({
   requiredRoles: [conf.AUTH_ADMIN_ROLE],
 }), async (req, res) => {
+
   const user = await DI.em.findOneOrFail(conf.USER_CLASS, {
     [conf.USER_USERNAME]: req.params.name,
   }, {
@@ -99,7 +103,8 @@ usersRouter.get(conf.BY_NAME, Auth({
 usersRouter.post(conf.BY_SEARCH, Auth({
   requiredRoles: [conf.AUTH_ADMIN_ROLE],
 }), async (req, res) => {
-  const {page = 1, limit = conf.PAGE_SIZE, ...where} = req.body
+
+  let {page = 1, limit = conf.PAGE_SIZE, ...where} = req.body
   if (limit < 1) {
     return res.json({})
   }
@@ -122,6 +127,7 @@ usersRouter.post(conf.BY_SEARCH, Auth({
 //}
 //response: HTTP_CREATED id:number/unique
 usersRouter.post(conf.BY_SIGNUP, async (req, res) => {
+
   if (!DI.em) {
     log.error('middleware not initialised yet')
     throw new MiddlewareErr(conf.HTTP_INTERNAL)
@@ -150,6 +156,7 @@ usersRouter.post(conf.BY_SIGNUP, async (req, res) => {
 usersRouter.post('/', Auth({
   requiredRoles: [conf.AUTH_ADMIN_ROLE],
 }), async (req, res) => {
+
   req.body.password = await bcrypt.hash(req.body.password, conf.SALT)
 
   const user = DI.em.create(conf.USER_CLASS, {
@@ -177,6 +184,7 @@ usersRouter.post('/', Auth({
 //}
 //response: HTTP_SUCC count:number
 usersRouter.delete('/', Auth({}), async (req, res) => {
+
   if (!req.user[conf.USER_ROLES].map(e => e[conf.ROLE_NAME])
     .includes(conf.AUTH_ADMIN_ROLE)) {
     DI.em.remove(req.user)
@@ -201,6 +209,7 @@ usersRouter.delete('/', Auth({}), async (req, res) => {
 //}
 //response: HTTP_NO_CONT
 usersRouter.put('/', Auth({}), async (req, res) => {
+
   req.body.password = await bcrypt.hash(req.body.password, conf.SALT)
 
   req.user.username = req.body.username
@@ -220,9 +229,10 @@ usersRouter.put('/', Auth({}), async (req, res) => {
 //  roles: [id: number/unique]/nullable,
 //}
 //response: HTTP_NO_CONT
-usersRouter.put(BY_ID, Auth({
+usersRouter.put(conf.BY_ID, Auth({
   requiredRoles: [conf.AUTH_ADMIN_ROLE],
 }), async (req, res) => {
+
   const user = await DI.em.findOneOrFail(conf.USER_CLASS, req.params.id, {
     populate: !req.body.roles ? [] : [conf.USER_ROLES],
   })

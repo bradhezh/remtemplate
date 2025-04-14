@@ -6,15 +6,11 @@ module.exports = {
   ITEMS_EP: '/api/items',
   BY_ID: '/id/:id',
   BY_NAME: '/name/:name',
-  BY_USERID: '/userid/:userid',
-  BY_USERNAME: '/username/:username',
-  BY_USER: '/user',
-  BY_ADMIN: '/admin',
-  BY_ID_ADMIN: '/id/:id/admin',
+  BY_ROLE: '/role/:id',
+  BY_USER: '/user/:id',
+  BY_SEARCH: '/search',
+  BY_SIGNUP: '/signup',
+  BY_ALL: '/all',
 
-  ERR_IV_USER_PASSWD: 'Please input the username and password',
-  ERR_IV_USER_PASSWD_CONFIRM: 'Please input the username, password, and password confirmation',
-  ERR_IV_PASSWD_CONFIRM: 'Please confirm your password',
-
-  PASSWD_MIN: 8,
+  PASSWORD_MIN: 8,
 }

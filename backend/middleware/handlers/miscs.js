@@ -5,7 +5,8 @@ const log = require('../utils/log')
 
 // before requests are handled by controllers
 const reqLogger = (req, res, next) => {
-  log.debug(req.method, req.path, req.body)
+
+  log.debug(req.method, req.path)
   if (conf.NODE_ENV === conf.NODE_ENV_DEV) {
     log.debug(req.body)
   }
@@ -14,6 +15,7 @@ const reqLogger = (req, res, next) => {
 
 // the default handler
 const unknownEp = (req, res) => {
+
   log.debug('unknown endpoint')
   if (conf.UNEP_SPA) {
     res.sendFile(path.join(process.cwd(), conf.UNEP_SPA))
@@ -21,6 +23,7 @@ const unknownEp = (req, res) => {
 }
 
 const errHandler = (err, req, res, next) => {
+
   log.error(`${err.name}: ${err.message}`)
 
   if (err.name === conf.ERR_NOT_FOUND) {

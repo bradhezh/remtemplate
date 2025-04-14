@@ -3,6 +3,7 @@ const {LogErr} = require('../utils/errors')
 const {DI} = require('../middleware')
 
 const info = async (...params) => {
+
   if (conf.NODE_ENV === conf.NODE_ENV_TST) {
     return
   }
@@ -23,6 +24,7 @@ const info = async (...params) => {
 }
 
 const debug = async (...params) => {
+
   if (
     conf.NODE_ENV !== conf.NODE_ENV_DBG && conf.NODE_ENV !== conf.NODE_ENV_DEV
   ) {
@@ -45,6 +47,7 @@ const debug = async (...params) => {
 }
 
 const error = async (...params) => {
+
   console.error(new Date(), ':', 'error:', ...params)
 
   if (conf.NODE_ENV !== conf.NODE_ENV_DBG) {

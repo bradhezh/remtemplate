@@ -15,12 +15,13 @@ const {DI} = require('../middleware')
 //  name: string, token: string,
 //}
 loginRouter.post('/', async (req, res) => {
+
   if (!DI.em || !DI.jwtSecret) {
     log.error('middleware not initialised yet')
     throw new MiddlewareErr(conf.HTTP_INTERNAL)
   }
 
-  const user = await DI.em.findOne(User, {
+  const user = await DI.em.findOne(conf.USER_CLASS, {
     [conf.USER_USERNAME]: req.body.username,
   }, {
     populate: [conf.USER_PASSWORD],
